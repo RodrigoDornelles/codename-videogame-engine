@@ -123,6 +123,33 @@ local function create_request(method, uri)
         return request, function() end
     end
 
+    self.http_file_curl = function (output_file)
+        local index = 1
+        local request = 'curl -L -s -o "'..output_file..'" '
+
+        if method == 'HEAD' then
+            request = request..'-'..'-HEAD '
+        else
+            request = request..'-X '..method..' '
+        end
+        
+        while index <= #self.header_list do
+            local header = self.header_list[index]
+            local value = self.header_dict[header]
+            request = request..'-H "'..header..': '..value..'" '
+            index = index + 1
+        end
+
+        if method ~= 'GET' and method ~= 'HEAD' and #self.body_content > 0 then
+            request = request..'-d \''..self.body_content..'\' '
+        end
+
+        request = request..uri..' &'
+
+        self = nil
+        return request, function() end
+    end
+
     self.to_wget_cmd = function ()
         local parts = {'wget --quiet --output-document=-'}
 

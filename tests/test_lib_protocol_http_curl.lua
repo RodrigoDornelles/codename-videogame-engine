@@ -130,4 +130,24 @@ function test_http_post_with_body()
     luaunit.assertEquals(std.http.body, 'uppercase_content')
 end
 
+function test_http_file_curl_get()
+    local std = {http = {}}
+    io.popen = mock_popen
+    
+    local request = protocol_http.create_request('GET', 'pudim.com.br')
+    request.http_file_curl('output.txt')
+    
+    protocol_http.handler({
+        std = std,
+        url = 'pudim.com.br',
+        method = 'GET',
+        output_file = 'output.txt'
+    })
+
+    luaunit.assertEquals(std.http.ok, true)
+    luaunit.assertEquals(std.http.error, nil)
+    luaunit.assertEquals(std.http.status, 200)
+    luaunit.assertEquals(std.http.body, 'i love pudim!')
+end
+
 os.exit(luaunit.LuaUnit.run())
