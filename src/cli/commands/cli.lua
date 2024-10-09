@@ -33,10 +33,16 @@ local function cli_dump(args)
     return zeebo_bootstrap.dump(dist)
 end
 
+local function cli_init(args)
+    local project_name = args[1] or 'my_project'
+    init.init_project(project_name)
+end
+
 local P = {
     ['cli-build'] = cli_build,
     ['cli-test'] = cli_test,
-    ['cli-dump'] = cli_dump
+    ['cli-dump'] = cli_dump,
+    ['cli-init'] = cli_init
 }
 
 return P
