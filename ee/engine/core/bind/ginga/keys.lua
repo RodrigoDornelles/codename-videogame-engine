@@ -18,7 +18,7 @@ local key_bindings={
 
 local fixture_196_key = ''
 local pressed_196_key = ''
-local fixture_196_looped = false
+local fixture_196_time = 0
 
 local function event_ginga(std, evt)
     if evt.class ~= 'key' then return end
@@ -46,6 +46,7 @@ local function event_ginga(std, evt)
     if is_back_or_red and pressed then pressed_196_key = gly_key end
     if is_back_or_red and not pressed and pressed_196_key == gly_key then 
         fixture_196_key = gly_key
+        fixture_196_time = std.milis 
         return
     end
 
@@ -56,11 +57,8 @@ end
 
 local function event_fixed(std)
     if #fixture_196_key > 0 then
-        if not fixture_196_looped then
-            fixture_196_looped = true
-        else
+        if std.milis - fixture_196_time >= 50 then
             std.bus.emit('rkey', fixture_196_key, 0)
-            fixture_196_looped = false
             fixture_196_key = ''
         end
     else

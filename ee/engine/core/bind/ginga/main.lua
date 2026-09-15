@@ -119,11 +119,11 @@ local function register_fixed_loop(fallback)
         xpcall(draw, engine.handler)
         canvas:flush()
         if fallback_restarts == fallback then
-            event.timer(engine.delay, tick)
+            event.timer(100, tick)
         end
     end
 
-    event.timer(engine.delay, tick)
+    event.timer(100, tick)
 end
 
 local function register_fallback(fallback)
@@ -140,7 +140,7 @@ local function register_fallback(fallback)
         end
     end
 
-    event.timer(engine.delay, tick)
+    event.timer(100, tick)
 end
 
 local function register_event_loop()
